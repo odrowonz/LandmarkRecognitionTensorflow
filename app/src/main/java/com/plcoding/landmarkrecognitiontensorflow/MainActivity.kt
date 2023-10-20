@@ -52,7 +52,8 @@ class MainActivity : ComponentActivity() {
                 val analyzer = remember {
                     LandmarkImageAnalyzer(
                         classifier = TfLiteLandmarkClassifier(
-                            context = applicationContext
+                            context = applicationContext//,
+                            //labels = loadLabelsFromAssets("labels.txt")
                         ),
                         onResults = {
                             classifications = it
@@ -81,7 +82,7 @@ class MainActivity : ComponentActivity() {
                     ) {
                         classifications.forEach {
                             Text(
-                                text = it.name,
+                                text = it.name+it.score,
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .background(MaterialTheme.colorScheme.primaryContainer)
@@ -100,4 +101,13 @@ class MainActivity : ComponentActivity() {
     private fun hasCameraPermission() = ContextCompat.checkSelfPermission(
         this, Manifest.permission.CAMERA
     ) == PackageManager.PERMISSION_GRANTED
+
+    private fun loadLabelsFromAssets(filename: String): List<String> {
+        return try {
+            assets.open(filename).bufferedReader().useLines { it.toList() }
+        } catch (e: Exception) {
+            e.printStackTrace()
+            emptyList()
+        }
+    }
 }

@@ -11,14 +11,16 @@ import org.tensorflow.lite.support.image.TensorImage
 import org.tensorflow.lite.task.core.BaseOptions
 import org.tensorflow.lite.task.core.vision.ImageProcessingOptions
 import org.tensorflow.lite.task.vision.classifier.ImageClassifier
-
+//import java.util.*
 
 class TfLiteLandmarkClassifier (
     private val context: Context,
     private val threshold: Float = 0.5f,
-    private val maxResults: Int = 3
+    private val maxResults: Int = 3//,
+    //private val labels: List<String>
 ): LandmarkClassifier {
     private var classifier: ImageClassifier? = null
+
     private fun setupClassifier() {
         val baseOptions = BaseOptions.builder()
             .setNumThreads(2)
@@ -38,6 +40,7 @@ class TfLiteLandmarkClassifier (
             e.printStackTrace()
         }
     }
+
     override fun classify(bitmap: Bitmap, rotation: Int): List<Classification> {
         if(classifier == null) {
             setupClassifier()
@@ -57,22 +60,36 @@ class TfLiteLandmarkClassifier (
 
         val results = classifier?.classify(tensorImage, imageProcessingOptions)
 
-        if (results != null) {
+            /*if (results != null) {
             results.forEach { classification ->
-                Log.d("TfLiteLandmarkClassifier", "Label: ${classification.categories[0].displayName}, Score: ${classification.categories[0].score}")
+                val labelIndex = classification.categoryLabel
+                if (labelIndex >= 0 && labelIndex < labels.size) {
+                    val label = labels[labelIndex]
+                    Log.d("TfLiteLandmarkClassifier", "Label: $label, Score: ${classification.categories[0].score}")
+                }
             }
         } else {
             Log.e("TfLiteLandmarkClassifier", "No results from classification")
-        }
+        }*/
 
         return results?.flatMap { classifications ->
             classifications.categories.map { category ->
                 Classification(
-                    name = category.displayName,
+                    name = category.label,
                     score = category.score
                 )
             }
         }?.distinctBy { it.name } ?: emptyList()
+        /*return results?.flatMap { classification ->
+            classification.categories.map { category ->
+                val labelIndex = category.label
+                //val name = labels.getOrNull(labelIndex) ?: category.displayName
+                Classification(
+                    name = labelIndex,
+                    score = category.score
+                )
+            }
+        }?.distinctBy { it.name } ?: emptyList()*/
     }
 
     private fun getOrientationFromRotation(rotation: Int): ImageProcessingOptions.Orientation {
