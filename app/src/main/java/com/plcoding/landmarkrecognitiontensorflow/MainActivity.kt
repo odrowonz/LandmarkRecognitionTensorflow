@@ -38,6 +38,7 @@ import androidx.compose.material3.Button
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 
 data class SelectedLabel(val label: String)
 
@@ -94,7 +95,12 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier
                         .fillMaxSize()
                 ) {
-                    CameraPreview(controller, Modifier.fillMaxSize())
+                    // CameraPreview(controller, Modifier.fillMaxSize())
+                    CameraPreview(
+                        controller = controller,
+                        modifier = Modifier.fillMaxSize(),
+                        edgingColor = colorResource(id = R.color.purple_200)
+                    )
 
                     Column(
                         modifier = Modifier

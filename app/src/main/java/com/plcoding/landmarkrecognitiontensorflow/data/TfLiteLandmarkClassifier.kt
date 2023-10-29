@@ -85,46 +85,22 @@ class TfLiteLandmarkClassifier (
                 .removeAlphaChannel().compress(Bitmap.CompressFormat.PNG, 100, fos)
             fos.flush()
             fos.close()
-            Log.d("TfLiteLandmarkClassifier", "Изображение (alpha "+imageToSave.hasAlpha()+") сохранено: " + imageFile.absolutePath)
+            Log.d("TfLiteLandmarkClassifier", "Изображение (alpha "+imageToSave.removeAlphaChannel().hasAlpha()+") сохранено: " + imageFile.absolutePath)
         } catch (e: IOException) {
             e.printStackTrace()
         }
     }
     override fun classify(bitmap: Bitmap, rotation: Int): List<Classification> {
-        /*if(classifier == null) {
-            setupClassifier()
-        }*/
-        /*if (bitmap.isBitmapRGBA()) {
-            Log.d("TfLiteLandmarkClassifier", "Image consists alpha channel!")
-        }*/
-
         val imageProcessor = ImageProcessor.Builder()
-            .add(ResizeOp(224, 224, ResizeOp.ResizeMethod.BILINEAR))
+            //.add(ResizeOp(224, 224, ResizeOp.ResizeMethod.BILINEAR))
             .build()
         val tensorImage = imageProcessor.process(TensorImage.fromBitmap(bitmap))
 
         val imageProcessingOptions = ImageProcessingOptions.builder()
-            .setOrientation(getOrientationFromRotation(rotation))
+            //.setOrientation(getOrientationFromRotation(rotation))
             .build()
 
-        // Log the processed image dimensions
-        //val width = tensorImage.width
-        //val height = tensorImage.height
-        //Log.d("TfLiteLandmarkClassifier", "Image Dimensions: $width x $height")
-
         val results = classifier?.classify(tensorImage, imageProcessingOptions)
-
-            /*if (results != null) {
-            results.forEach { classification ->
-                val labelIndex = classification.categoryLabel
-                if (labelIndex >= 0 && labelIndex < labels.size) {
-                    val label = labels[labelIndex]
-                    Log.d("TfLiteLandmarkClassifier", "Label: $label, Score: ${classification.categories[0].score}")
-                }
-            }
-        } else {
-            Log.e("TfLiteLandmarkClassifier", "No results from classification")
-        }*/
         val label = selectedLabel?.value?.label
 
         val maxScoreCategory = results?.flatMap { it.categories }
@@ -157,16 +133,6 @@ class TfLiteLandmarkClassifier (
                 )
             }
         }?.distinctBy { it.name } ?: emptyList()
-        /*return results?.flatMap { classification ->
-            classification.categories.map { category ->
-                val labelIndex = category.label
-                //val name = labels.getOrNull(labelIndex) ?: category.displayName
-                Classification(
-                    name = labelIndex,
-                    score = category.score
-                )
-            }
-        }?.distinctBy { it.name } ?: emptyList()*/
     }
 
     private fun getOrientationFromRotation(rotation: Int): ImageProcessingOptions.Orientation {

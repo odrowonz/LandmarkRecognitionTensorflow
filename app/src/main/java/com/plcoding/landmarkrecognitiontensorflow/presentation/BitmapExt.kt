@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Matrix
 import android.graphics.Paint
+import java.lang.Math.min
 
 fun Bitmap.centerCrop(desiredWidth: Int, desiredHeight: Int): Bitmap {
     val xStart = (width - desiredWidth) / 2
@@ -14,6 +15,18 @@ fun Bitmap.centerCrop(desiredWidth: Int, desiredHeight: Int): Bitmap {
     }
 
     return Bitmap.createBitmap(this, xStart, yStart, desiredWidth, desiredHeight)
+}
+
+fun Bitmap.squareCrop(): Bitmap {
+    val demension = min(width, height)
+    return this.centerCrop(demension, demension)
+}
+
+fun Bitmap.scaleSize(desiredWidth: Int, desiredHeight: Int): Bitmap {
+    return Bitmap.createScaledBitmap(this, desiredWidth, desiredHeight, false);
+}
+fun Bitmap.scaleSquareSize(desiredSize: Int): Bitmap {
+    return this.scaleSize(desiredSize, desiredSize)
 }
 
 fun Bitmap.rotateBitmap(degrees: Int): Bitmap {
