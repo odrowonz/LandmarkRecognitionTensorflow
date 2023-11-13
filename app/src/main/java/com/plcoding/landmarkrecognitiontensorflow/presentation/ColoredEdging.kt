@@ -16,7 +16,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 
 @Composable
 fun ColoredEdging(
-    controller: LifecycleCameraController,
+    //controller: LifecycleCameraController,
     modifier: Modifier = Modifier,
     edgingColor: Color = Color.Magenta // Цвет фона окантовки
 ) {

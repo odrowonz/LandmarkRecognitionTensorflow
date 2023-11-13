@@ -2,6 +2,7 @@ package com.plcoding.landmarkrecognitiontensorflow.presentation
 
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.Matrix
 import android.graphics.Paint
 import java.lang.Math.min

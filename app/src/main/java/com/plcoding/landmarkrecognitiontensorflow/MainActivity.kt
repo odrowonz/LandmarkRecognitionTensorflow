@@ -72,6 +72,7 @@ class MainActivity : ComponentActivity() {
                     LandmarkImageAnalyzer(
                         classifier = TfLiteLandmarkClassifier(
                             context = applicationContext,
+                            labels = labels,
                             selectedLabel = selectedLabel,
                             selectedMode = selectedMode
                         ),
@@ -140,7 +141,7 @@ class MainActivity : ComponentActivity() {
                                         expanded = false
                                     },
                                     text = {
-                                        Text(text = label ?: "")
+                                        Text(text = label)
                                     }
                                 )
                             }

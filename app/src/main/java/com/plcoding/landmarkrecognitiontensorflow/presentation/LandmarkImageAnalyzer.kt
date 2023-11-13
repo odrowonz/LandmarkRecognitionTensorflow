@@ -13,7 +13,7 @@ class LandmarkImageAnalyzer(
     private var frameSkipCounter = 0
 
     override fun analyze(image: ImageProxy) {
-        if(frameSkipCounter % 10 == 0) {
+        if(frameSkipCounter % 2 == 0) {
             val rotationDegrees = image.imageInfo.rotationDegrees
             val bitmap = image
                 .toBitmap()

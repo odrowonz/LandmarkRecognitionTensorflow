@@ -33,5 +33,5 @@ fun CameraPreview(
         modifier = modifier
     )
 
-    ColoredEdging(controller, modifier, edgingColor)
+    ColoredEdging(/*controller,*/ modifier, edgingColor)
 }
